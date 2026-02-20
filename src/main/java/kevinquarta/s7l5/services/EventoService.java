@@ -3,6 +3,7 @@ package kevinquarta.s7l5.services;
 import kevinquarta.s7l5.entities.Evento;
 import kevinquarta.s7l5.entities.Utente;
 import kevinquarta.s7l5.exceptions.NotFoundException;
+import kevinquarta.s7l5.exceptions.UnauthroizedException;
 import kevinquarta.s7l5.payloads.EventoDTO;
 import kevinquarta.s7l5.repositories.EventiRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -45,24 +46,29 @@ public class EventoService {
 
 
 // ------MODIFICA EVENTO
-      public Evento findByIdAndUpdateEvento (Long eventoId,EventoDTO payload){
+      public Evento findByIdAndUpdateEvento (Long eventoId,EventoDTO payload,Utente organizzatore) {
 
 // -------RICERCA EVENTO
-        Evento found = this.findById(eventoId);
-
+          Evento found = this.findById(eventoId);
+// -------CONTROLLO ORGANIZZATORE
+          if (found.getOrganizzatore().getId()==organizzatore.getId()){
 // -------MODIFICA EVENTO
-        found.setTitolo(payload.titolo());
-        found.setDescrizione(payload.descrizione());
-        found.setDataEvento(payload.dataEvento());
-        found.setLuogo(payload.luogo());
-        found.setNumPosti(payload.numPosti());
+              found.setTitolo(payload.titolo());
+              found.setDescrizione(payload.descrizione());
+              found.setDataEvento(payload.dataEvento());
+              found.setLuogo(payload.luogo());
+              found.setNumPosti(payload.numPosti());
 
 // -------SAVE EVENTO
-         Evento modifiedEvento = eventiRepository.save(found);
+              Evento modifiedEvento = eventiRepository.save(found);
 
 // -------LOG
-         log.info("L'evento è stato modificato correttamente");
-         return modifiedEvento;
+              log.info("L'evento è stato modificato correttamente");
+              return modifiedEvento;
+          } else {
+
+              throw new UnauthroizedException("Solo il creatore di questo evento può modificarlo");
+          }
       }
 
 
@@ -78,9 +84,15 @@ public class EventoService {
 
 // ------ELIMINA EVENTO
 
-public void findByIdAndDelete(Long eventoId){
+public void findByIdAndDelete(Long eventoId,Utente organizzatore){
     Evento found = this.findById(eventoId);
-    this.eventiRepository.delete(found);
+    // -------CONTROLLO ORGANIZZATORE
+    if (found.getOrganizzatore().getId()==organizzatore.getId()){
+        this.eventiRepository.delete(found);
+    } else {
+        throw new UnauthroizedException("Solo il creatore di questo evento può eliminarlo");
+    }
+
 }
 
 

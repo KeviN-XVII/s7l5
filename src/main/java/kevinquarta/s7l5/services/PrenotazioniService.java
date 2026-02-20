@@ -28,10 +28,8 @@ public class PrenotazioniService {
     }
 
 // ------SALVA PRENOTAZIONE
-     public Prenotazione savePrenotazione (PrenotazioneDTO payload) {
+     public Prenotazione savePrenotazione (PrenotazioneDTO payload,Utente utente) {
 // ------RICERCO UTENTE E VIAGGIO
-          Utente utente = utentiRepository.findById(payload.utenteid())
-            .orElseThrow(()->new NotFoundException(payload.utenteid()));
           Evento evento = eventiRepository.findById(payload.eventoId())
             .orElseThrow(()->new NotFoundException(payload.eventoId()));
 
