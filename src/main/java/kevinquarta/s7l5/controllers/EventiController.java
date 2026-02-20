@@ -30,8 +30,8 @@ public class EventiController {
 
 //  ---POST CREA EVENTO
     @PostMapping
-    @PreAuthorize("hasAuthority('ORGANIZZATORE')")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('ORGANIZZATORE')")
     public Evento saveEvento(@AuthenticationPrincipal Utente currentOrganizzatore,
                              @RequestBody @Validated EventoDTO payload,
                              BindingResult validationResult){
@@ -51,7 +51,7 @@ public class EventiController {
      @PreAuthorize("hasAuthority('ORGANIZZATORE')")
      public Page<Evento> findAll(@RequestParam(defaultValue = "0")int page,
                                   @RequestParam(defaultValue = "10")int size,
-                                  @RequestParam(defaultValue = "dipendente")String orderBy,
+                                  @RequestParam(defaultValue = "titolo")String orderBy,
                                   @RequestParam(defaultValue = "asc")String sortCriteria) {
      return eventoService.findAll(page, size, orderBy, sortCriteria);
      }
