@@ -29,6 +29,11 @@ public class UtentiService {
         this.bcrypt = bcrypt;
     }
 
+// -----FIND BY EMAIL
+    public Utente findByEmail (String email) {
+         return this.utentiRepository.findByEmail(email).orElseThrow(()-> new NotFoundException("L'utente con email " + email + " non è stato trovato!"));
+    }
+
 
 // -----SAVE UTENTE
     public Utente saveUtente(UtenteDTO payload){
