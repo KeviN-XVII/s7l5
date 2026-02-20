@@ -30,7 +30,7 @@ public class EventiController {
 
 //  ---POST CREA EVENTO
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ORGANIZZATORE')")
+    @PreAuthorize("hasAuthority('ORGANIZZATORE')")
     @ResponseStatus(HttpStatus.CREATED)
     public Evento saveEvento(@AuthenticationPrincipal Utente currentOrganizzatore,
                              @RequestBody @Validated EventoDTO payload,
@@ -48,7 +48,7 @@ public class EventiController {
 
 //  ---GET LISTA EVENTI
      @GetMapping
-     @PreAuthorize("hasAnyAuthority('ORGANIZZATORE')")
+     @PreAuthorize("hasAuthority('ORGANIZZATORE')")
      public Page<Evento> findAll(@RequestParam(defaultValue = "0")int page,
                                   @RequestParam(defaultValue = "10")int size,
                                   @RequestParam(defaultValue = "dipendente")String orderBy,
@@ -58,7 +58,7 @@ public class EventiController {
 
 //  ----PUT MODIFICA EVENTO
     @PutMapping("/{eventoId}")
-    @PreAuthorize("hasAnyAuthority('ORGANIZZATORE')")
+    @PreAuthorize("hasAuthority('ORGANIZZATORE')")
     public Evento findEventoIdAndUpdate(@PathVariable long eventoId,
                                         @AuthenticationPrincipal Utente currentOrganizzatore,
                                         @RequestBody @Validated EventoDTO payload,
@@ -76,11 +76,11 @@ public class EventiController {
 
 //  ----DELETE ELIMINA EVENTO
       @DeleteMapping("/{eventoId}")
-      @PreAuthorize("hasAnyAuthority('ORGANIZZATORE')")
+      @PreAuthorize("hasAuthority('ORGANIZZATORE')")
       @ResponseStatus(HttpStatus.NO_CONTENT)
       public void deleteViaggio(@PathVariable long eventoId,@AuthenticationPrincipal Utente currentOrganizzatore) {
            this.eventoService.findByIdAndDelete(eventoId,currentOrganizzatore);
       }
-      
+
 }
 
